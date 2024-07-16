@@ -16,4 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="195dp"
+        android:layout_height="81dp"
+        android:text="Pulsame"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="118dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
