@@ -5,39 +5,35 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bienvenido al Bibliotec"
-        android:textSize="24sp"
-        android:layout_gravity="center"
-        android:paddingBottom="20dp" />
+        android:hint="Nombre" />
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etApellido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Apellido" />
+
+    <EditText
+        android:id="@+id/etUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Usuario" />
 
     <EditText
-        android:id="@+id/etPassword"
+        android:id="@+id/etClave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Clave"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Entrar"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnRegistrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Registrar"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="16dp" />
 </LinearLayout>
