@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etNombres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombres" />
+
+    <EditText
+        android:id="@+id/etApellidos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Apellidos" />
+
+    <EditText
+        android:id="@+id/etFechaNacimiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha de Nacimiento (YYYY-MM-DD)" />
+
+    <EditText
+        android:id="@+id/etPaisId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID del País" />
+
+    <Button
+        android:id="@+id/btnGuardarAutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Autor"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
