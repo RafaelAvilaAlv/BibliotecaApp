@@ -18,9 +18,9 @@ class AdminActivity : AppCompatActivity() {
         botonautores = findViewById(R.id.buttonAutores)
         botongenero= findViewById(R.id.buttonGeneros)
 
-       // botonlibros.setOnClickListener{
-         //   showResult()
-        //}
+        botonlibros.setOnClickListener{
+            showResultlibro()
+        }
 
          botonautores.setOnClickListener{
              showResultaurores()
@@ -46,6 +46,14 @@ class AdminActivity : AppCompatActivity() {
 //Abrir genero
     private fun showResultgenero() {
         val intent = Intent(this, AgregarGeneroActivity::class.java).apply {
+
+        }
+        startActivity(intent)
+    }
+
+    //Abrir libro
+    private fun showResultlibro() {
+        val intent = Intent(this, AgregarLibros::class.java).apply {
 
         }
         startActivity(intent)
