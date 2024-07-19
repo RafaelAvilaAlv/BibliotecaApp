@@ -43,6 +43,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "fecha_nacimiento TEXT," +
                     "pais TEXT)"
 
+        //aqui esta la tablla
+        private const val SQL_CREATE_GENEROS =
+            "CREATE TABLE genero (" +
+                    "genero_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "nombre TEXT)"
+
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
         ///igual esta implementado aqui
         private const val SQL_DELETE_AUTORES = "DROP TABLE IF EXISTS autor"
