@@ -27,6 +27,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "id INTEGER PRIMARY KEY," +
                     "nombre TEXT," +
                     "apellido TEXT," +
+                    "cedula TEXT," +
+                    "correo TEXT," +
+                    "direccion TEXT," +
+                    "telefono TEXT," +
                     "usuario TEXT," +
                     "clave TEXT)"
 
