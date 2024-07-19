@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 class AgregarAutorActivity : AppCompatActivity() {
     private lateinit var etNombres: EditText
     private lateinit var etApellidos: EditText
+
     private lateinit var etFechaNacimiento: EditText
     private lateinit var etPaisId: EditText
     private lateinit var btnGuardarAutor: Button
