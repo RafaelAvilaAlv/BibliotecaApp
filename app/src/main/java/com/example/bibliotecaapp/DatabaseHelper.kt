@@ -37,7 +37,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "nombres TEXT," +
                     "apellidos TEXT," +
                     "fecha_nacimiento TEXT," +
-                    "pais_id INTEGER)"
+                    "pais TEXT)"
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
         ///igual esta implementado aqui

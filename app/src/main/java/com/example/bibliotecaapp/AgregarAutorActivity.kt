@@ -22,7 +22,7 @@ class AgregarAutorActivity : AppCompatActivity() {
         etNombres = findViewById(R.id.etNombres)
         etApellidos = findViewById(R.id.etApellidos)
         etFechaNacimiento = findViewById(R.id.etFechaNacimiento)
-        etPaisId = findViewById(R.id.etPaisId)
+        etPaisId = findViewById(R.id.etPais)
         btnGuardarAutor = findViewById(R.id.btnGuardarAutor)
 
         btnGuardarAutor.setOnClickListener { guardarAutor() }
@@ -32,9 +32,9 @@ class AgregarAutorActivity : AppCompatActivity() {
         val nombres = etNombres.text.toString()
         val apellidos = etApellidos.text.toString()
         val fechaNacimiento = etFechaNacimiento.text.toString()
-        val paisId = etPaisId.text.toString().toInt()
+        val pais = etPaisId.text.toString()
 
-        if (nombres.isEmpty() || apellidos.isEmpty() || fechaNacimiento.isEmpty() || paisId.toString().isEmpty()) {
+        if (nombres.isEmpty() || apellidos.isEmpty() || fechaNacimiento.isEmpty() || pais.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
@@ -46,7 +46,7 @@ class AgregarAutorActivity : AppCompatActivity() {
             put("nombres", nombres)
             put("apellidos", apellidos)
             put("fecha_nacimiento", fechaNacimiento)
-            put("pais_id", paisId)
+            put("pais", pais)
         }
 
         val newRowId = db.insert("autor", null, values)

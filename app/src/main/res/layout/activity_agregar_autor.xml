@@ -24,10 +24,10 @@
         android:hint="Fecha de Nacimiento (YYYY-MM-DD)" />
 
     <EditText
-        android:id="@+id/etPaisId"
+        android:id="@+id/etPais"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID del País" />
+        android:hint="País" />
 
     <Button
         android:id="@+id/btnGuardarAutor"

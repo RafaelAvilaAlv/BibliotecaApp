@@ -5,5 +5,5 @@ data class Autor(
     val nombres: String,
     val apellidos: String,
     val fechaNacimiento: String,
-    val paisId: Int
+    val pais: String
 )
