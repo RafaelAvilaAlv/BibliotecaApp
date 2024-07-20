@@ -9,12 +9,14 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(SQL_CREATE_ENTRIES)
         ///agrege la creaicon de autores
         db.execSQL(SQL_CREATE_AUTORES)
+        db.execSQL(SQL_CREATE_GENEROS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL(SQL_DELETE_ENTRIES)
         //agrege la eliminacion de autores
         db.execSQL(SQL_DELETE_AUTORES)
+        db.execSQL(SQL_DELETE_GENEROS)
         onCreate(db)
     }
 
@@ -52,5 +54,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
         ///igual esta implementado aqui
         private const val SQL_DELETE_AUTORES = "DROP TABLE IF EXISTS autor"
+        private const val SQL_DELETE_GENEROS = "DROP TABLE IF EXISTS genero" // Añadir esta línea
+
     }
 }
