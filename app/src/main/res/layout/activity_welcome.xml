@@ -3,11 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome"
-        android:textSize="24sp" />
+        android:text="usuarios"
+        android:textSize="24sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/buttonverinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="perfil"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/buttonprestamo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pedir libros" />
+    <Button
+        android:id="@+id/buttonverlibros"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="buscar libros"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/buttonverprestamos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Historial de prestamos" />
+
+    <Button
+        android:id="@+id/buttonvolver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="btnRegresar" />
+
+
 </LinearLayout>
