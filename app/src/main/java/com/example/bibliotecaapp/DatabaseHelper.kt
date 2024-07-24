@@ -10,6 +10,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         ///agrege la creaicon de autores
         db.execSQL(SQL_CREATE_AUTORES)
         db.execSQL(SQL_CREATE_GENEROS)
+        db.execSQL(SQL_CREATE_LIBROS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -17,6 +18,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         //agrege la eliminacion de autores
         db.execSQL(SQL_DELETE_AUTORES)
         db.execSQL(SQL_DELETE_GENEROS)
+        db.execSQL(SQL_DELETE_LIBROS)
         onCreate(db)
     }
 
@@ -51,10 +53,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "genero_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "nombre TEXT)"
 
+        private const val SQL_CREATE_LIBROS =
+            "CREATE TABLE libro (" +
+                    "libro_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "titulo TEXT," +
+                    "autor_id INTEGER," +
+                    "genero_id INTEGER," +
+                    "FOREIGN KEY(autor_id) REFERENCES autor(autor_id)," +
+                    "FOREIGN KEY(genero_id) REFERENCES genero(genero_id))"
+
+
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
         ///igual esta implementado aqui
         private const val SQL_DELETE_AUTORES = "DROP TABLE IF EXISTS autor"
         private const val SQL_DELETE_GENEROS = "DROP TABLE IF EXISTS genero" // Añadir esta línea
+        private const val SQL_DELETE_LIBROS = "DROP TABLE IF EXISTS libro"
+
 
     }
 }
