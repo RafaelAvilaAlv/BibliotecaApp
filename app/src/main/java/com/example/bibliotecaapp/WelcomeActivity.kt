@@ -58,7 +58,8 @@ class WelcomeActivity : AppCompatActivity() {
 
     //BuscarLibro
     private fun showResultBusclibro() {
-        val intent = Intent(this, BuscarLIb::class.java).apply {
+        val intent = Intent(this, BuscarLib::class.java).apply {
+
 
         }
         startActivity(intent)

@@ -1,5 +1,6 @@
 package com.example.bibliotecaapp
 
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -20,34 +21,37 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(SQL_DELETE_AUTORES)
         db.execSQL(SQL_DELETE_GENEROS)
         db.execSQL(SQL_DELETE_LIBROS)
+
         onCreate(db)
     }
 
-    //Busqueda de libros
+    // Método para buscar libros
     fun searchBooks(name: String, category: String): List<Libros> {
         val db = readableDatabase
         val selection = StringBuilder()
         val selectionArgs = mutableListOf<String>()
 
         if (name.isNotEmpty()) {
-            selection.append("titulo LIKE ?")
+            selection.append("libro.titulo LIKE ?")
             selectionArgs.add("%$name%")
         }
 
         if (category.isNotEmpty()) {
             if (selection.isNotEmpty()) selection.append(" AND ")
-            selection.append("genero_id IN (SELECT genero_id FROM genero WHERE nombre LIKE ?)")
+            selection.append("libro.genero_id IN (SELECT genero.genero_id FROM genero WHERE genero.nombre LIKE ?)")
             selectionArgs.add("%$category%")
         }
 
-        val cursor = db.query(
-            "libro",
-            arrayOf("libro_id", "titulo", "autor_id", "genero_id"),
-            if (selection.isNotEmpty()) selection.toString() else null,
-            if (selectionArgs.isNotEmpty()) selectionArgs.toTypedArray() else null,
-            null, null, null
-        )
+        val query = """
+            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
+                   autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
+            FROM libro
+            INNER JOIN autor ON libro.autor_id = autor.autor_id
+            INNER JOIN genero ON libro.genero_id = genero.genero_id
+            WHERE ${if (selection.isNotEmpty()) selection.toString() else "1=1"}
+        """
 
+        val cursor = db.rawQuery(query, selectionArgs.toTypedArray())
         val books = mutableListOf<Libros>()
         with(cursor) {
             while (moveToNext()) {
@@ -55,13 +59,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val titulo = getString(getColumnIndexOrThrow("titulo"))
                 val autorId = getInt(getColumnIndexOrThrow("autor_id"))
                 val generoId = getInt(getColumnIndexOrThrow("genero_id"))
-                books.add(Libros(id, titulo, autorId, generoId))
+                val imagePath = getString(getColumnIndexOrThrow("image_path"))
+                val autorNombre = getString(getColumnIndexOrThrow("autor_nombre"))
+                val generoNombre = getString(getColumnIndexOrThrow("genero_nombre"))
+
+                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath))
             }
         }
         cursor.close()
         return books
     }
-
 
     // Método para obtener autores
     fun getAllAutores(): List<String> {
@@ -93,19 +100,67 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return generos
     }
 
+    // Método para insertar libro
     fun insertLibro(libro: Libros) {
         val db = writableDatabase
         val values = ContentValues().apply {
             put("titulo", libro.titulo)
             put("autor_id", libro.autor_id)
             put("genero_id", libro.genero_id)
+            put("image_path", libro.imagePath) // Agregar esta línea
         }
         db.insert("libro", null, values)
     }
 
+    // Método para obtener el ID del autor basado en el nombre
+    fun getAutorIdByName(nombre: String): Int? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT autor_id FROM autor WHERE nombres = ?", arrayOf(nombre))
+        val autorId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("autor_id")) else null
+        cursor.close()
+        return autorId
+    }
+
+    // Método para obtener el ID del género basado en el nombre
+    fun getGeneroIdByName(nombre: String): Int? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT genero_id FROM genero WHERE nombre = ?", arrayOf(nombre))
+        val generoId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("genero_id")) else null
+        cursor.close()
+        return generoId
+    }
+
+    // Método para recuperar los libros
+    fun getAllBooks(): List<Libros> {
+        val db = readableDatabase
+        val query = """
+            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
+                   autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
+            FROM libro
+            INNER JOIN autor ON libro.autor_id = autor.autor_id
+            INNER JOIN genero ON libro.genero_id = genero.genero_id
+        """
+        val cursor = db.rawQuery(query, null)
+        val books = mutableListOf<Libros>()
+        with(cursor) {
+            while (moveToNext()) {
+                val id = getInt(getColumnIndexOrThrow("libro_id"))
+                val titulo = getString(getColumnIndexOrThrow("titulo"))
+                val autorId = getInt(getColumnIndexOrThrow("autor_id"))
+                val generoId = getInt(getColumnIndexOrThrow("genero_id"))
+                val imagePath = getString(getColumnIndexOrThrow("image_path"))
+                val autorNombre = getString(getColumnIndexOrThrow("autor_nombre"))
+                val generoNombre = getString(getColumnIndexOrThrow("genero_nombre"))
+
+                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath))
+            }
+        }
+        cursor.close()
+        return books
+    }
 
     companion object {
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 2
         const val DATABASE_NAME = "BibliotecaApp.db"
 
         private const val SQL_CREATE_ENTRIES =
@@ -120,7 +175,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "usuario TEXT," +
                     "clave TEXT)"
 
-        //aqui agrego las tablas de autores y paises
         private const val SQL_CREATE_AUTORES =
             "CREATE TABLE autor (" +
                     "autor_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -129,7 +183,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "fecha_nacimiento TEXT," +
                     "pais TEXT)"
 
-        //aqui esta la tablla
         private const val SQL_CREATE_GENEROS =
             "CREATE TABLE genero (" +
                     "genero_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -141,16 +194,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "titulo TEXT," +
                     "autor_id INTEGER," +
                     "genero_id INTEGER," +
+                    "image_path TEXT," + // Añadido para la ruta de la imagen
                     "FOREIGN KEY(autor_id) REFERENCES autor(autor_id)," +
                     "FOREIGN KEY(genero_id) REFERENCES genero(genero_id))"
 
-
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
-        ///igual esta implementado aqui
         private const val SQL_DELETE_AUTORES = "DROP TABLE IF EXISTS autor"
-        private const val SQL_DELETE_GENEROS = "DROP TABLE IF EXISTS genero" // Añadir esta línea
+        private const val SQL_DELETE_GENEROS = "DROP TABLE IF EXISTS genero"
         private const val SQL_DELETE_LIBROS = "DROP TABLE IF EXISTS libro"
-
-
     }
 }

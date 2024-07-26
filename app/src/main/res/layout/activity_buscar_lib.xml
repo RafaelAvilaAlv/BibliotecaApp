@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="16dp">
-    <TextView
+    tools:context=".BuscarLib">
+
+    <!-- Spinner para seleccionar el criterio de búsqueda -->
+    <Spinner
+        android:id="@+id/searchCriteriaSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buscar"
-        android:textSize="24sp"
-        android:layout_marginBottom="24dp" />
-</LinearLayout>
+        android:layout_margin="16dp"
+        android:entries="@array/search_criteria" />
+
+    <!-- EditText para ingresar la consulta de búsqueda -->
+    <EditText
+        android:id="@+id/searchQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchCriteriaSpinner"
+        android:layout_margin="16dp"
+        android:hint="Ingrese la búsqueda" />
+
+    <!-- LinearLayout para los botones de búsqueda y mostrar todos -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchQuery"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <!-- Botón para realizar la búsqueda -->
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar" />
+
+        <!-- Espacio entre los botones -->
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
+        <!-- Botón para mostrar todos los libros -->
+        <Button
+            android:id="@+id/showAllBooksButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostrar Todos los Libros" />
+
+    </LinearLayout>
+
+    <!-- RecyclerView para mostrar los resultados de búsqueda o todos los libros -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonContainer"
+        android:layout_margin="16dp" />
+
+</RelativeLayout>
