@@ -263,7 +263,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "direccion TEXT," +
                     "telefono TEXT," +
                     "usuario TEXT," +
-                    "clave TEXT)"
+                    "clave TEXT,"+
+                    "foto TEXT)"
+
 
         private const val SQL_CREATE_AUTORES =
             "CREATE TABLE autor (" +
