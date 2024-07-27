@@ -13,6 +13,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(SQL_CREATE_AUTORES)
         db.execSQL(SQL_CREATE_GENEROS)
         db.execSQL(SQL_CREATE_LIBROS)
+        db.execSQL(SQL_CREATE_PRESTAMOS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -24,6 +25,48 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         onCreate(db)
     }
+
+    //Obtener id de libro
+    fun getBookById(id: Int): Libros? {
+        val db = this.readableDatabase
+        var libro: Libros? = null
+        val cursor = db.query(
+            "libro", arrayOf("libro_id", "titulo", "autor_id", "genero_id", "image_path"),
+            "libro_id=?", arrayOf(id.toString()), null, null, null, null
+        )
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val libroId = cursor.getInt(cursor.getColumnIndexOrThrow("libro_id"))
+                val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
+                val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
+                val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
+                val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
+                val autorNombre = getAutorNameById(autorId) // Método para obtener el nombre del autor
+                val generoNombre = getGeneroNameById(generoId) // Método para obtener el nombre del género
+
+                libro = Libros(libroId, titulo, autorId, generoId, autorNombre, generoNombre, imagePath)
+            }
+            cursor.close()
+        }
+        return libro
+    }
+    //  obtener el nombre del autor y del género por ID
+    private fun getAutorNameById(autorId: Int): String {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT nombres FROM autor WHERE autor_id = ?", arrayOf(autorId.toString()))
+        val autorNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombres")) else ""
+        cursor.close()
+        return autorNombre
+    }
+
+    private fun getGeneroNameById(generoId: Int): String {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT nombre FROM genero WHERE genero_id = ?", arrayOf(generoId.toString()))
+        val generoNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombre")) else ""
+        cursor.close()
+        return generoNombre
+    }
+
 
     // Método para buscar libros
     fun searchBooks(name: String, category: String): List<Libros> {
@@ -112,6 +155,40 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.insert("libro", null, values)
     }
 
+    //Historial de prestamos por id de usuario
+    fun getPrestamosByUserId(userId: Int): List<Prestamo> {
+        val prestamos = mutableListOf<Prestamo>()
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM prestamos WHERE usuario_id = ?", arrayOf(userId.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
+                val usuarioId = cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id"))
+                val libroId = cursor.getInt(cursor.getColumnIndexOrThrow("libro_id"))
+                val fechaPrestamo = cursor.getString(cursor.getColumnIndexOrThrow("fecha_prestamo"))
+                val fechaDevolucion = cursor.getString(cursor.getColumnIndexOrThrow("fecha_devolucion"))
+                val prestamo = Prestamo(id, usuarioId, libroId, fechaPrestamo, fechaDevolucion)
+                prestamos.add(prestamo)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return prestamos
+    }
+
+    //Metodo para guardar pedidos
+    fun insertPedido(prestamo: Prestamo) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("usuario_id", prestamo.usuario_id)
+            put("libro_id", prestamo.libro_id)
+            put("fecha_prestamo", prestamo.fecha_prestamo)
+            put("fecha_devolucion", prestamo.fecha_devolucion)
+        }
+        db.insert("pedidos", null, values)
+    }
+
+
     // Método para obtener el ID del autor basado en el nombre
     fun getAutorIdByName(nombre: String): Int? {
         val db = readableDatabase
@@ -129,6 +206,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         cursor.close()
         return generoId
     }
+//Metodo para obtener el titulo del libro basado en el id
+    fun getLibroTitleById(libroId: Int): String {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT titulo FROM libros WHERE id = ?", arrayOf(libroId.toString()))
+
+        var titulo = "Título no encontrado"
+        if (cursor.moveToFirst()) {
+            titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
+        }
+        cursor.close()
+        return titulo
+    }
+
 
     // Método para recuperar los libros
     fun getAllBooks(): List<Libros> {
@@ -197,6 +287,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "image_path TEXT," + // Añadido para la ruta de la imagen
                     "FOREIGN KEY(autor_id) REFERENCES autor(autor_id)," +
                     "FOREIGN KEY(genero_id) REFERENCES genero(genero_id))"
+
+
+        private const val SQL_CREATE_PRESTAMOS =
+            "CREATE TABLE prestamo (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "usuario_id INTEGER," +
+                    "libro_id INTEGER," +
+                    "fecha_prestamo TEXT," +
+                    "fecha_devolucion TEXT," +
+                    "FOREIGN KEY(usuario_id) REFERENCES usuarios(id)," +
+                    "FOREIGN KEY(libro_id) REFERENCES libro(libro_id))"
+
 
         private const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS usuarios"
         private const val SQL_DELETE_AUTORES = "DROP TABLE IF EXISTS autor"

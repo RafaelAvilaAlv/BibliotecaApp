@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Perfil"/>
+    <item
+        android:id="@+id/nav_request_books"
+        android:icon="@drawable/ic_request_books"
+        android:title="Pedir libros"/>
+    <item
+        android:id="@+id/nav_search_books"
+        android:icon="@drawable/ic_search_books"
+        android:title="Buscar libros"/>
+    <item
+        android:id="@+id/nav_loan_history"
+        android:icon="@drawable/ic_loan_history"
+        android:title="Historial de préstamos"/>
+</menu>
+

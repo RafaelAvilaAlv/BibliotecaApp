@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título del Libro"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewAutor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Autor del Libro"
+        android:textSize="18sp"
+        android:layout_below="@id/textViewTitulo"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewGenero"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Género del Libro"
+        android:textSize="18sp"
+        android:layout_below="@id/textViewAutor"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewFechaPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha de Pedido"
+        android:textSize="18sp"
+        android:layout_below="@id/textViewGenero"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextFechaPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="yyyy/MM/dd"
+        android:layout_below="@id/textViewFechaPedido"
+        android:layout_marginBottom="16dp"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/textViewFechaDevolucion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha de Devolución"
+        android:textSize="18sp"
+        android:layout_below="@id/editTextFechaPedido"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/editTextFechaDevolucion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="yyyy/MM/dd"
+        android:layout_below="@id/textViewFechaDevolucion"
+        android:layout_marginBottom="16dp"
+        android:inputType="date"/>
+
+    <Button
+        android:id="@+id/buttonInsertarPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insertar Pedido"
+        android:layout_below="@id/editTextFechaDevolucion"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

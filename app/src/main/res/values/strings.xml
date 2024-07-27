@@ -52,4 +52,12 @@
 
     <string name="book_image_description">Descripción de la imagen del libro</string>
 
+    <string name="profile">Perfil</string>
+    <string name="request_books">Pedir libros</string>
+    <string name="search_books">Buscar libros</string>
+    <string name="loan_history">Historial de préstamos</string>
+    <string name="profile_image_desc">Profile Image</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
 </resources>
