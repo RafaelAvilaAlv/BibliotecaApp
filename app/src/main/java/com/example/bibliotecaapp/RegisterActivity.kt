@@ -6,14 +6,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import android.provider.MediaStore
 import android.widget.ImageView
-import androidx.core.app.ActivityCompat.startActivityForResult
+import android.database.sqlite.SQLiteDatabase
+import android.database.Cursor
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var etNombre: EditText
@@ -83,30 +82,106 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         val dbHelper = DatabaseHelper(this)
-        val db = dbHelper.writableDatabase
+        val db = dbHelper.readableDatabase
 
-        val values = ContentValues().apply {
-            put("nombre", nombre)
-            put("apellido", apellido)
-            put("cedula", cedula)
-            put("correo", correo)
-            put("direccion", direccion)
-            put("telefono", telefono)
-            put("usuario", usuario)
-            put("clave", clave)
-            put("foto", imageUri.toString())
-        }
-
-        val newRowId = db.insert("usuarios", null, values)
-
-        if (newRowId != -1L) {
-            Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
-            finish()
+        if (!validarCedula(cedula)) {
+            mostrarMensajeError("Cédula inválida o no ecuatoriana")
+        } else if (!validarTextoSoloLetras(nombre)) {
+            mostrarMensajeError("Nombre debe contener solo letras")
+        } else if (!validarTextoSoloLetras(apellido)) {
+            mostrarMensajeError("Apellido debe contener solo letras")
+        } else if (!validarTextoSoloLetras(direccion)) {
+            mostrarMensajeError("Dirección debe contener solo letras")
+        } else if (!validarTelefono(telefono)) {
+            mostrarMensajeError("Teléfono inválido, debe tener 10 dígitos y comenzar con 0")
+        } else if (!validarEmail(correo)) {
+            mostrarMensajeError("Email inválido, debe contener @")
+        } else if (usuarioExiste(db, usuario)) {
+            mostrarMensajeError("Usuario ya existe")
+        } else if (cedulaExiste(db, cedula)) {
+            mostrarMensajeError("Ya existe una persona registrada con ese número de cédula")
         } else {
-            Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
-        }
+            val values = ContentValues().apply {
+                put("nombre", nombre)
+                put("apellido", apellido)
+                put("cedula", cedula)
+                put("correo", correo)
+                put("direccion", direccion)
+                put("telefono", telefono)
+                put("usuario", usuario)
+                put("clave", clave)
+                put("foto", imageUri.toString())
+            }
 
-        db.close()
+            val newRowId = db.insert("usuarios", null, values)
+
+            if (newRowId != -1L) {
+                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Error en el registro", Toast.LENGTH_SHORT).show()
+            }
+
+            db.close()
+        }
+    }
+
+    private fun usuarioExiste(db: SQLiteDatabase, usuario: String): Boolean {
+        val cursor = db.query(
+            "usuarios",
+            arrayOf("usuario"),
+            "usuario = ?",
+            arrayOf(usuario),
+            null,
+            null,
+            null
+        )
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
+    }
+
+    private fun cedulaExiste(db: SQLiteDatabase, cedula: String): Boolean {
+        val cursor = db.query(
+            "usuarios",
+            arrayOf("cedula"),
+            "cedula = ?",
+            arrayOf(cedula),
+            null,
+            null,
+            null
+        )
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
+    }
+
+    private fun validarCedula(cedula: String): Boolean {
+        if (cedula.length != 10) return false
+        val coeficientes = intArrayOf(2, 1, 2, 1, 2, 1, 2, 1, 2)
+        val digitos = cedula.map { it.toString().toInt() }
+        val suma = coeficientes.zip(digitos).map { (coef, digito) ->
+            val producto = coef * digito
+            if (producto >= 10) producto - 9 else producto
+        }.sum()
+        val digitoVerificador = (10 - (suma % 10)) % 10
+        return digitoVerificador == digitos.last()
+    }
+
+    private fun validarTextoSoloLetras(texto: String): Boolean {
+        return texto.all { it.isLetter() || it.isWhitespace() }
+    }
+
+    private fun validarTelefono(telefono: String): Boolean {
+        return telefono.matches(Regex("^0\\d{9}$"))
+    }
+
+    private fun validarEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun mostrarMensajeError(mensaje: String) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
 
     private fun regresar() {

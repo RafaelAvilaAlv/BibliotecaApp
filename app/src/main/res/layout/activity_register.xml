@@ -33,7 +33,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
-                android:contentDescription="Logo"
                 android:src="@drawable/bibliotec" />
         </LinearLayout>
 
@@ -63,7 +62,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Nombre"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/etApellido"
@@ -72,7 +72,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Apellido"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/etCedula"
@@ -81,7 +82,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Cédula"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/etCorreo"
@@ -90,7 +92,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Correo"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/etDireccion"
@@ -99,7 +102,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Dirección"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="textPostalAddress" />
 
         <EditText
             android:id="@+id/ettelefono"
@@ -108,7 +112,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Teléfono"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/etUsuario"
@@ -117,7 +122,8 @@
             android:layout_marginBottom="12dp"
             android:hint="Usuario"
             android:padding="12dp"
-            android:background="@drawable/edit_text_background" />
+            android:background="@drawable/edit_text_background"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/etClave"
@@ -145,7 +151,7 @@
             android:id="@+id/btnRegresar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="24dp"
             android:background="@drawable/button_border"
             android:text="Regresar"
             android:textColor="@color/your_desired_color"
