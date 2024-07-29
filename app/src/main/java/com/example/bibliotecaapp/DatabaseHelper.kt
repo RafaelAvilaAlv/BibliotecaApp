@@ -26,48 +26,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         onCreate(db)
     }
 
-    //Obtener id de libro
-    fun getBookById(id: Int): Libros? {
-        val db = this.readableDatabase
-        var libro: Libros? = null
-        val cursor = db.query(
-            "libro", arrayOf("libro_id", "titulo", "autor_id", "genero_id", "image_path"),
-            "libro_id=?", arrayOf(id.toString()), null, null, null, null
-        )
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                val libroId = cursor.getInt(cursor.getColumnIndexOrThrow("libro_id"))
-                val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
-                val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
-                val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
-                val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
-                val autorNombre = getAutorNameById(autorId) // Método para obtener el nombre del autor
-                val generoNombre = getGeneroNameById(generoId) // Método para obtener el nombre del género
-
-                libro = Libros(libroId, titulo, autorId, generoId, autorNombre, generoNombre, imagePath)
-            }
-            cursor.close()
-        }
-        return libro
-    }
-    //  obtener el nombre del autor y del género por ID
-    private fun getAutorNameById(autorId: Int): String {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT nombres FROM autor WHERE autor_id = ?", arrayOf(autorId.toString()))
-        val autorNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombres")) else ""
-        cursor.close()
-        return autorNombre
-    }
-
-    private fun getGeneroNameById(generoId: Int): String {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT nombre FROM genero WHERE genero_id = ?", arrayOf(generoId.toString()))
-        val generoNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombre")) else ""
-        cursor.close()
-        return generoNombre
-    }
-
-
     // Método para buscar libros
     fun searchBooks(name: String, category: String): List<Libros> {
         val db = readableDatabase
@@ -155,6 +113,69 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.insert("libro", null, values)
     }
 
+    // Método para obtener el ID del autor basado en el nombre
+    fun getAutorIdByName(nombre: String): Int? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT autor_id FROM autor WHERE nombres = ?", arrayOf(nombre))
+        val autorId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("autor_id")) else null
+        cursor.close()
+        return autorId
+    }
+
+    // Método para obtener el ID del género basado en el nombre
+    fun getGeneroIdByName(nombre: String): Int? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT genero_id FROM genero WHERE nombre = ?", arrayOf(nombre))
+        val generoId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("genero_id")) else null
+        cursor.close()
+        return generoId
+    }
+
+    //Obtener id de libro
+    fun getBookById(id: Int): Libros? {
+        val db = this.readableDatabase
+        var libro: Libros? = null
+        val cursor = db.query(
+            "libro", arrayOf("libro_id", "titulo", "autor_id", "genero_id", "image_path"),
+            "libro_id=?", arrayOf(id.toString()), null, null, null, null
+        )
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val libroId = cursor.getInt(cursor.getColumnIndexOrThrow("libro_id"))
+                val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
+                val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
+                val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
+                val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
+                val autorNombre = getAutorNameById(autorId) // Método para obtener el nombre del autor
+                val generoNombre = getGeneroNameById(generoId) // Método para obtener el nombre del género
+
+                libro = Libros(libroId, titulo, autorId, generoId, autorNombre, generoNombre, imagePath)
+            }
+            cursor.close()
+        }
+        return libro
+    }
+
+    //  obtener el nombre del autor y del género por ID
+    private fun getAutorNameById(autorId: Int): String {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT nombres FROM autor WHERE autor_id = ?", arrayOf(autorId.toString()))
+        val autorNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombres")) else ""
+        cursor.close()
+        return autorNombre
+    }
+
+    private fun getGeneroNameById(generoId: Int): String {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT nombre FROM genero WHERE genero_id = ?", arrayOf(generoId.toString()))
+        val generoNombre = if (cursor.moveToFirst()) cursor.getString(cursor.getColumnIndexOrThrow("nombre")) else ""
+        cursor.close()
+        return generoNombre
+    }
+
+
+
+
     //Historial de prestamos por id de usuario
     fun getPrestamosByUserId(userId: Int): List<Prestamo> {
         val prestamos = mutableListOf<Prestamo>()
@@ -189,23 +210,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-    // Método para obtener el ID del autor basado en el nombre
-    fun getAutorIdByName(nombre: String): Int? {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT autor_id FROM autor WHERE nombres = ?", arrayOf(nombre))
-        val autorId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("autor_id")) else null
-        cursor.close()
-        return autorId
-    }
 
-    // Método para obtener el ID del género basado en el nombre
-    fun getGeneroIdByName(nombre: String): Int? {
-        val db = readableDatabase
-        val cursor = db.rawQuery("SELECT genero_id FROM genero WHERE nombre = ?", arrayOf(nombre))
-        val generoId = if (cursor.moveToFirst()) cursor.getInt(cursor.getColumnIndexOrThrow("genero_id")) else null
-        cursor.close()
-        return generoId
-    }
 //Metodo para obtener el titulo del libro basado en el id
     fun getLibroTitleById(libroId: Int): String {
         val db = readableDatabase
@@ -224,28 +229,27 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getAllBooks(): List<Libros> {
         val db = readableDatabase
         val query = """
-            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
-                   autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
-            FROM libro
-            INNER JOIN autor ON libro.autor_id = autor.autor_id
-            INNER JOIN genero ON libro.genero_id = genero.genero_id
-        """
-        val cursor = db.rawQuery(query, null)
+        SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
+               autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
+        FROM libro
+        INNER JOIN autor ON libro.autor_id = autor.autor_id
+        INNER JOIN genero ON libro.genero_id = genero.genero_id
+    """
         val books = mutableListOf<Libros>()
-        with(cursor) {
-            while (moveToNext()) {
-                val id = getInt(getColumnIndexOrThrow("libro_id"))
-                val titulo = getString(getColumnIndexOrThrow("titulo"))
-                val autorId = getInt(getColumnIndexOrThrow("autor_id"))
-                val generoId = getInt(getColumnIndexOrThrow("genero_id"))
-                val imagePath = getString(getColumnIndexOrThrow("image_path"))
-                val autorNombre = getString(getColumnIndexOrThrow("autor_nombre"))
-                val generoNombre = getString(getColumnIndexOrThrow("genero_nombre"))
+        db.rawQuery(query, null).use { cursor ->
+            while (cursor.moveToNext()) {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("libro_id"))
+                val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
+                val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
+                val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
+                val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
+                val autorNombre = cursor.getString(cursor.getColumnIndexOrThrow("autor_nombre"))
+                val generoNombre = cursor.getString(cursor.getColumnIndexOrThrow("genero_nombre"))
 
                 books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath))
             }
         }
-        cursor.close()
+        db.close()
         return books
     }
 

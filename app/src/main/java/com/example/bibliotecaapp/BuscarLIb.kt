@@ -10,8 +10,10 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+//import com.example.bibliotecaapp.adapter.LibrosAdapter
 
 class BuscarLib : AppCompatActivity() {
 
@@ -22,6 +24,7 @@ class BuscarLib : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var librosAdapter: LibrosAdapter
     private lateinit var databaseHelper: DatabaseHelper
+    //private lateinit var adapter: LibrosAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +36,11 @@ class BuscarLib : AppCompatActivity() {
         showAllBooksButton = findViewById(R.id.showAllBooksButton)
         recyclerView = findViewById(R.id.recyclerView)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
         librosAdapter = LibrosAdapter(emptyList())
+
+        // Configurar el adaptador
+        // adapter = LibrosAdapter() // Inicializa tu adaptador aquí
         recyclerView.adapter = librosAdapter
 
         databaseHelper = DatabaseHelper(this)
