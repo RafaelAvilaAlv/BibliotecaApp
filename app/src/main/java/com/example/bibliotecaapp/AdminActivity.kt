@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.bibliotecaapp.AgregarGeneroActivity
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var botonlibros: Button
     private lateinit var botonautores: Button
     private lateinit var botongenero: Button
+    private lateinit var botonUsuarios: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,48 +17,47 @@ class AdminActivity : AppCompatActivity() {
 
         botonlibros = findViewById(R.id.buttonLibros)
         botonautores = findViewById(R.id.buttonAutores)
-        botongenero= findViewById(R.id.buttonGeneros)
+        botongenero = findViewById(R.id.buttonGeneros)
+        botonUsuarios = findViewById(R.id.buttonUsuarios)
 
-        botonlibros.setOnClickListener{
+        botonlibros.setOnClickListener {
             showResultlibro()
         }
 
-         botonautores.setOnClickListener{
-             showResultaurores()
-         }
+        botonautores.setOnClickListener {
+            showResultaurores()
+        }
 
-        botongenero.setOnClickListener{
+        botongenero.setOnClickListener {
             showResultgenero()
         }
 
-
-
-
-
+        botonUsuarios.setOnClickListener {
+            showResultUsuarios()
+        }
     }
-    //Abrir autores
+
+    // Abrir autores
     private fun showResultaurores() {
-        val intent = Intent(this, AgregarAutorActivity::class.java).apply {
-
-        }
+        val intent = Intent(this, AgregarAutorActivity::class.java)
         startActivity(intent)
     }
 
-//Abrir genero
+    // Abrir genero
     private fun showResultgenero() {
-        val intent = Intent(this, AgregarGeneroActivity::class.java).apply {
-
-        }
+        val intent = Intent(this, AgregarGeneroActivity::class.java)
         startActivity(intent)
     }
 
-    //Abrir libro
+    // Abrir libro
     private fun showResultlibro() {
-        val intent = Intent(this, AgregarLibros::class.java).apply {
-
-        }
+        val intent = Intent(this, AgregarLibros::class.java)
         startActivity(intent)
     }
 
-
+    // Abrir listado de usuarios
+    private fun showResultUsuarios() {
+        val intent = Intent(this, ListarUsuariosActivity::class.java)
+        startActivity(intent)
+    }
 }

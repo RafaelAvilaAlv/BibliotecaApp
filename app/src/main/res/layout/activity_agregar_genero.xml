@@ -1,153 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#D8D8D8"
     tools:context=".AgregarGeneroActivity">
 
-    <!-- TextView para el título -->
-    <TextView
-        android:id="@+id/title1"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"
-        android:background="#673AB7"
-        android:gravity="center"
-        android:text="Registro de Género"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <!-- EditText para ingresar el nombre del género -->
-    <EditText
-        android:id="@+id/etNombre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:drawable/edit_text"
-        android:hint="Nombre del género"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title1" />
+        <!-- LinearLayout for title -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-    <!-- EditText para ingresar el código (ID) -->
-    <EditText
-        android:id="@+id/codigo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:drawable/edit_text"
-        android:hint="Código (borrar y actualizar)"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etNombre" />
+            <TextView
+                android:id="@+id/title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="R E G I S T R O  D E  G É N E R O"
+                android:textColor="#024F9D"
+                android:textSize="25sp" />
+        </LinearLayout>
 
-    <!-- Botón para guardar el género -->
-    <Button
-        android:id="@+id/btnGuardarGenero"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#673AB7"
-        android:text="Guardar Género"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/codigo" />
-
-    <!-- Botón para listar los géneros -->
-    <Button
-        android:id="@+id/btnListarGenero"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#673AB7"
-        android:text="Listar Géneros"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGuardarGenero" />
-
-    <!-- Botón para actualizar el género -->
-    <Button
-        android:id="@+id/btnActualizarGenero"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#673AB7"
-        android:text="Actualizar Género"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnBorrarGenero"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnListarGenero" />
-
-    <!-- Botón para borrar un género -->
-    <Button
-        android:id="@+id/btnBorrarGenero"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#673AB7"
-        android:text="Borrar Género"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnActualizarGenero"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toBottomOf="@+id/btnListarGenero" />
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnActualizarGenero"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegresar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="400dp"
-        android:layout_marginTop="16dp">
-
-        <TextView
-            android:id="@+id/listaMensaje"
+        <!-- EditText for entering genre name -->
+        <EditText
+            android:id="@+id/etNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#E0E0E0"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:scrollbars="vertical" />
-    </ScrollView>
+            android:layout_marginBottom="12dp"
+            android:hint="Nombre del género"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_background"
+            android:inputType="text" />
 
-    <!-- Botón para regresar a la ventana anterior -->
-    <Button
-        android:id="@+id/btnRegresar"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="#673AB7"
-        android:text="Regresar"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- EditText for entering genre code -->
+        <EditText
+            android:id="@+id/codigo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Código (borrar y actualizar)"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_background"
+            android:inputType="number" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Button for saving the genre -->
+        <Button
+            android:id="@+id/btnGuardarGenero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_border"
+            android:text="Guardar Género"
+            android:textColor="@color/your_desired_color"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+        <!-- Button for listing genres -->
+        <Button
+            android:id="@+id/btnListarGenero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_border"
+            android:text="Listar Géneros"
+            android:textColor="@color/your_desired_color"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+        <!-- Button for updating the genre -->
+        <Button
+            android:id="@+id/btnActualizarGenero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_border"
+            android:text="Actualizar Género"
+            android:textColor="@color/your_desired_color"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+        <!-- Button for deleting the genre -->
+        <Button
+            android:id="@+id/btnBorrarGenero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_border"
+            android:text="Borrar Género"
+            android:textColor="@color/your_desired_color"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+        <!-- ScrollView for message list -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#E0E0E0">
+
+            <TextView
+                android:id="@+id/listaMensaje"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:scrollbars="vertical" />
+        </ScrollView>
+
+        <!-- Button for returning to the previous screen -->
+        <Button
+            android:id="@+id/btnRegresar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:text="Regresar"
+            android:textColor="@color/your_desired_color"
+            android:padding="4dp"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</ScrollView>

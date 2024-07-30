@@ -1,18 +1,24 @@
 package com.example.bibliotecaapp
 
+import android.Manifest
 import android.content.ContentValues
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import android.provider.MediaStore
 import android.widget.ImageView
-import android.database.sqlite.SQLiteDatabase
-import android.database.Cursor
+import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import java.io.File
+import java.io.FileOutputStream
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var etNombre: EditText
@@ -29,6 +35,17 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
 
     private var imageUri: Uri? = null
+
+    // Registro del resultado de la selección de imagen
+    private val imagenSeleccionada =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    imageUri = uri
+                    imageView.setImageURI(uri)
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +68,14 @@ class RegisterActivity : AppCompatActivity() {
         btnRegistrar.setOnClickListener { registrarUsuario() }
         btnRegresar.setOnClickListener { regresar() }
         btnSelectImage.setOnClickListener { selectImage() }
+
+        // Verificar y solicitar permisos de almacenamiento
+        checkAndRequestStoragePermission()
     }
 
     private fun selectImage() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, 100)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            imageView.setImageURI(imageUri)
-        }
+        imagenSeleccionada.launch(intent)
     }
 
     private fun registrarUsuario() {
@@ -101,6 +113,8 @@ class RegisterActivity : AppCompatActivity() {
         } else if (cedulaExiste(db, cedula)) {
             mostrarMensajeError("Ya existe una persona registrada con ese número de cédula")
         } else {
+            val imagePath = saveImageToInternalStorage() // Guardar la imagen en almacenamiento interno
+
             val values = ContentValues().apply {
                 put("nombre", nombre)
                 put("apellido", apellido)
@@ -110,7 +124,7 @@ class RegisterActivity : AppCompatActivity() {
                 put("telefono", telefono)
                 put("usuario", usuario)
                 put("clave", clave)
-                put("foto", imageUri.toString())
+                put("foto", imagePath) // Guardar la ruta de la imagen
             }
 
             val newRowId = db.insert("usuarios", null, values)
@@ -123,6 +137,50 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             db.close()
+        }
+    }
+
+    private fun saveImageToInternalStorage(): String? {
+        imageUri?.let { uri ->
+            val inputStream = contentResolver.openInputStream(uri)
+            val file = File(filesDir, "usuario_imagen_${System.currentTimeMillis()}.jpg")
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            return file.absolutePath
+        }
+        return null
+    }
+
+    private fun checkAndRequestStoragePermission() {
+        val readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        val writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        val permissionsToRequest = mutableListOf<String>()
+
+        if (readPermission != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (writePermission != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequest.toTypedArray(), REQUEST_CODE_STORAGE_PERMISSION)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_STORAGE_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permiso concedido", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Permiso de almacenamiento requerido", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -169,22 +227,26 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun validarTextoSoloLetras(texto: String): Boolean {
-        return texto.all { it.isLetter() || it.isWhitespace() }
+        return texto.all { it.isLetter() }
     }
 
     private fun validarTelefono(telefono: String): Boolean {
-        return telefono.matches(Regex("^0\\d{9}$"))
+        return telefono.length == 10 && telefono.startsWith("0")
     }
 
     private fun validarEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return email.contains("@")
     }
 
     private fun mostrarMensajeError(mensaje: String) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
 
     private fun regresar() {
         finish()
+    }
+
+    companion object {
+        private const val REQUEST_CODE_STORAGE_PERMISSION = 1
     }
 }

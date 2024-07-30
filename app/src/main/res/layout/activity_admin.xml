@@ -32,12 +32,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Registrar Géneros" />
+    <Button
+        android:id="@+id/buttonUsuarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Listado de Usuarios" />
 
     <Button
         android:id="@+id/buttonvolver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="regresar" />
+
 
 
 </LinearLayout>

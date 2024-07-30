@@ -208,7 +208,30 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
         db.insert("pedidos", null, values)
     }
+    // Método para obtener todos los usuarios registrados
+    fun getAllUsuarios(): List<Persona> {
+        val usuarios = mutableListOf<Persona>()
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM usuarios", null)
+        if (cursor.moveToFirst()) {
+            do {
+                val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+                val apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido"))
+                val cedula = cursor.getString(cursor.getColumnIndexOrThrow("cedula"))
+                val correo = cursor.getString(cursor.getColumnIndexOrThrow("correo"))
+                val direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion"))
+                val telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono"))
+                val usuario = cursor.getString(cursor.getColumnIndexOrThrow("usuario"))
+                val clave = cursor.getString(cursor.getColumnIndexOrThrow("clave"))
+                val foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
 
+                val persona = Persona(nombre, apellido, cedula, correo, direccion, telefono, usuario, clave, foto)
+                usuarios.add(persona)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return usuarios
+    }
 
 
 //Metodo para obtener el titulo del libro basado en el id

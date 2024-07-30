@@ -17,6 +17,9 @@
         android:theme="@style/Theme.BibliotecaApp"
         tools:targetApi="31">
         <activity
+            android:name=".ListarUsuariosActivity"
+            android:exported="false" />
+        <activity
             android:name=".ReporteLibrosActivity"
             android:exported="false" />
         <activity
