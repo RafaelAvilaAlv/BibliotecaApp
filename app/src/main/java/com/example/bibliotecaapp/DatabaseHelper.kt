@@ -22,6 +22,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(SQL_DELETE_AUTORES)
         db.execSQL(SQL_DELETE_GENEROS)
         db.execSQL(SQL_DELETE_LIBROS)
+        db.execSQL(SQL_CREATE_PRESTAMOS) // Asegúrate de que esta tabla esté creada
 
         onCreate(db)
     }
@@ -234,7 +235,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
 
-//Metodo para obtener el titulo del libro basado en el id
+    //Metodo para obtener el titulo del libro basado en el id
     fun getLibroTitleById(libroId: Int): String {
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT titulo FROM libros WHERE id = ?", arrayOf(libroId.toString()))
@@ -275,6 +276,40 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return books
     }
+
+
+    // Método para obtener un usuario por su ID
+    fun getUserById(userId: Int): Persona? {
+        val db = readableDatabase
+        var persona: Persona? = null
+        val cursor = db.query(
+            "usuarios",
+            arrayOf("nombre", "apellido", "cedula", "correo", "direccion", "telefono", "usuario", "clave", "foto"),
+            "id = ?",
+            arrayOf(userId.toString()),
+            null,
+            null,
+            null
+        )
+
+        if (cursor.moveToFirst()) {
+            val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"))
+            val apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido"))
+            val cedula = cursor.getString(cursor.getColumnIndexOrThrow("cedula"))
+            val correo = cursor.getString(cursor.getColumnIndexOrThrow("correo"))
+            val direccion = cursor.getString(cursor.getColumnIndexOrThrow("direccion"))
+            val telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono"))
+            val usuario = cursor.getString(cursor.getColumnIndexOrThrow("usuario"))
+            val clave = cursor.getString(cursor.getColumnIndexOrThrow("clave"))
+            val foto = cursor.getString(cursor.getColumnIndexOrThrow("foto"))
+
+            persona = Persona(nombre, apellido, cedula, correo, direccion, telefono, usuario, clave, foto)
+        }
+
+        cursor.close()
+        return persona
+    }
+
 
     companion object {
         const val DATABASE_VERSION = 2

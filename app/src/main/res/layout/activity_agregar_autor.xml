@@ -54,27 +54,34 @@
             android:background="@drawable/edit_text_background"
             android:inputType="textPersonName" />
 
-        <!-- EditText for entering author birthdate -->
-        <EditText
-            android:id="@+id/etFechaNacimiento"
+        <!-- LinearLayout for date of birth and country spinner -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:hint="Fecha de Nacimiento (YYYY-MM-DD)"
-            android:padding="12dp"
-            android:background="@drawable/edit_text_background"
-            android:inputType="date" />
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
 
-        <!-- EditText for entering author country -->
-        <EditText
-            android:id="@+id/etPais"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:hint="País"
-            android:padding="12dp"
-            android:background="@drawable/edit_text_background"
-            android:inputType="text" />
+            <!-- EditText for entering birth date -->
+            <EditText
+                android:id="@+id/etFechaNacimiento"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/edit_text"
+                android:hint="Fecha de Nacimiento"
+                android:padding="12dp"
+                android:focusable="false"
+                android:clickable="true" />
+
+            <!-- Spinner for selecting country -->
+            <Spinner
+                android:id="@+id/spinnerPais"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
         <!-- EditText for entering author code -->
         <EditText
