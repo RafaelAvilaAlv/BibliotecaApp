@@ -1,5 +1,6 @@
 package com.example.bibliotecaapp
 
+import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import java.util.Calendar
 
 class AgegarPrestamo : AppCompatActivity(){
     private lateinit var textViewTitulo: TextView
@@ -55,6 +57,23 @@ class AgegarPrestamo : AppCompatActivity(){
             textViewGenero.text = ""
         }
 
+        // Configurar el selector de fecha
+        val calendar = Calendar.getInstance()
+
+        val dateSetListenerPedido = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            editTextFechaPedido.setText(String.format("%04d/%02d/%02d", year, month + 1, dayOfMonth))
+        }
+        editTextFechaPedido.setOnClickListener {
+            DatePickerDialog(this, dateSetListenerPedido, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        val dateSetListenerDevolucion = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            editTextFechaDevolucion.setText(String.format("%04d/%02d/%02d", year, month + 1, dayOfMonth))
+        }
+        editTextFechaDevolucion.setOnClickListener {
+            DatePickerDialog(this, dateSetListenerDevolucion, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         // Configurar el botón para insertar el pedido
         buttonInsertarPedido.setOnClickListener {
             val fechaPedido = editTextFechaPedido.text.toString()
@@ -86,5 +105,4 @@ class AgegarPrestamo : AppCompatActivity(){
         }
         db.insert("pedidos", null, values)
     }
-
 }

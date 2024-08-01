@@ -55,6 +55,9 @@
             android:name=".AgregarPrestamo"
             android:exported="false" />
         <activity
+            android:name=".AgegarPrestamo"
+            android:exported="false" />
+        <activity
             android:name=".AgregarLibros"
             android:exported="false" />
         <activity
@@ -81,5 +84,6 @@
             </intent-filter>
         </activity>
     </application>
+
 
 </manifest>
