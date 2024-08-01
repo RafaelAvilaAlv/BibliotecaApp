@@ -1,6 +1,8 @@
 package com.example.bibliotecaapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,5 +24,13 @@ class ListarUsuariosActivity : AppCompatActivity() {
 
         usuariosAdapter = UsuariosAdapter(usuarios)
         recyclerView.adapter = usuariosAdapter
+
+        // Configurar el botón para generar el reporte
+        val buttonGenerateReport: Button = findViewById(R.id.buttonGenerateReport)
+        buttonGenerateReport.setOnClickListener {
+            val intent = Intent(this, ReporteUsuariosActivity::class.java)
+            startActivity(intent)
+        }
     }
+
 }

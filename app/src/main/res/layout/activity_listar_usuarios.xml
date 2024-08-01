@@ -15,6 +15,14 @@
         android:textColor="#024F9D"
         android:textSize="25sp" />
 
+    <Button
+        android:id="@+id/buttonGenerateReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generar Reporte"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewUsuarios"
         android:layout_width="match_parent"
