@@ -1,7 +1,5 @@
 package com.example.bibliotecaapp
 
-
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Canvas
@@ -20,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import com.example.bibliotecaapp.adapter.LibrosAdapter
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -48,7 +45,7 @@ class ReporteLibrosActivity : AppCompatActivity() {
         tableLayout = findViewById(R.id.tableLayoutReport)
 
         // Inicializar y configurar RecyclerView
-        recyclerView = findViewById(R.id.recyclerView) // Asegúrate de que este ID esté en el XML
+        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.setHasFixedSize(true)
 
@@ -82,22 +79,28 @@ class ReporteLibrosActivity : AppCompatActivity() {
         val titleHeader = TextView(this).apply {
             text = "Título"
             setPadding(8, 8, 8, 8)
-            setBackgroundColor(resources.getColor(R.color.tableHeaderBackground, null))
+            setBackgroundColor(ContextCompat.getColor(this@ReporteLibrosActivity, R.color.tableHeaderBackground))
         }
         val authorHeader = TextView(this).apply {
             text = "Autor"
             setPadding(8, 8, 8, 8)
-            setBackgroundColor(resources.getColor(R.color.tableHeaderBackground, null))
+            setBackgroundColor(ContextCompat.getColor(this@ReporteLibrosActivity, R.color.tableHeaderBackground))
         }
         val genreHeader = TextView(this).apply {
             text = "Género"
             setPadding(8, 8, 8, 8)
-            setBackgroundColor(resources.getColor(R.color.tableHeaderBackground, null))
+            setBackgroundColor(ContextCompat.getColor(this@ReporteLibrosActivity, R.color.tableHeaderBackground))
+        }
+        val quantityHeader = TextView(this).apply {
+            text = "Cantidad"
+            setPadding(8, 8, 8, 8)
+            setBackgroundColor(ContextCompat.getColor(this@ReporteLibrosActivity, R.color.tableHeaderBackground))
         }
 
         headerRow.addView(titleHeader)
         headerRow.addView(authorHeader)
         headerRow.addView(genreHeader)
+        headerRow.addView(quantityHeader)
         tableLayout.addView(headerRow)
 
         // Agregar filas con los datos de los libros
@@ -115,10 +118,15 @@ class ReporteLibrosActivity : AppCompatActivity() {
                 text = libro.generoNombre
                 setPadding(8, 8, 8, 8)
             }
+            val quantityCell = TextView(this).apply {
+                text = libro.cantidadEjemplares.toString()
+                setPadding(8, 8, 8, 8)
+            }
 
             row.addView(titleCell)
             row.addView(authorCell)
             row.addView(genreCell)
+            row.addView(quantityCell)
             tableLayout.addView(row)
         }
     }
@@ -153,7 +161,7 @@ class ReporteLibrosActivity : AppCompatActivity() {
         pdfDocument.finishPage(page)
 
         // Guardar el PDF en la carpeta de Descargas
-        val downloadsDirectory = getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        val downloadsDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(downloadsDirectory, "ReporteLibros.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(file))
@@ -166,9 +174,6 @@ class ReporteLibrosActivity : AppCompatActivity() {
         pdfDocument.close()
     }
 
-
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -176,10 +181,5 @@ class ReporteLibrosActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Permiso de almacenamiento requerido para guardar el PDF", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(System.currentTimeMillis())
     }
 }

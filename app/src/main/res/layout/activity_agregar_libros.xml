@@ -10,75 +10,81 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-    <TextView
-        android:id="@+id/registro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="REGISTRO DE LIBROS"
-        android:textColor="#024F9D"
-        android:textSize="40sp" />
+        <TextView
+            android:id="@+id/registro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="REGISTRO DE LIBROS"
+            android:textColor="#024F9D"
+            android:textSize="40sp" />
 
 
-    <EditText
-        android:id="@+id/editTextTitulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:hint="Nombre del Libro"
-        android:padding="12dp"
-        android:background="@drawable/edit_text_background" />
+        <EditText
+            android:id="@+id/editTextTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Nombre del Libro"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_background" />
 
-    <Spinner
-        android:id="@+id/spinnerGenero"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        <Spinner
+            android:id="@+id/spinnerGenero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
 
-    <Spinner
-        android:id="@+id/spinnerAutor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
+        <Spinner
+            android:id="@+id/spinnerAutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
 
-    <!-- Botón para seleccionar imagen -->
+        <Spinner
+            android:id="@+id/spinnerCantidadEjemplares"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/buttonSeleccionarImagen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_border"
-        android:text="Seleccionar Imagen"
-        android:textColor="@color/your_desired_color"
-        android:padding="5dp"
-        android:textSize="20sp" />
+        <!-- Botón para seleccionar imagen -->
 
-
-    <!-- Botón para generar reporte -->
-
-    <Button
-        android:id="@+id/buttonGenerarReporte"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_border"
-        android:text="Generar Reporte"
-        android:textColor="@color/your_desired_color"
-        android:padding="5dp"
-        android:textSize="20sp" />
+        <Button
+            android:id="@+id/buttonSeleccionarImagen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button_border"
+            android:text="Seleccionar Imagen"
+            android:textColor="@color/your_desired_color"
+            android:padding="5dp"
+            android:textSize="20sp" />
 
 
-    <Button
-        android:id="@+id/buttonGuardarLibro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/button_border"
-        android:text="Guardar Libro"
-        android:textColor="@color/your_desired_color"
-        android:padding="5dp"
-        android:textSize="20sp" />
+        <!-- Botón para generar reporte -->
+
+        <Button
+            android:id="@+id/buttonGenerarReporte"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button_border"
+            android:text="Generar Reporte"
+            android:textColor="@color/your_desired_color"
+            android:padding="5dp"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:id="@+id/buttonGuardarLibro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button_border"
+            android:text="Guardar Libro"
+            android:textColor="@color/your_desired_color"
+            android:padding="5dp"
+            android:textSize="20sp" />
 
     </LinearLayout>
 </ScrollView>

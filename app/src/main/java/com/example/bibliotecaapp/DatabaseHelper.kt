@@ -28,6 +28,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     // Método para buscar libros
+    // Método para buscar libros
     fun searchBooks(name: String, category: String): List<Libros> {
         val db = readableDatabase
         val selection = StringBuilder()
@@ -45,7 +46,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
 
         val query = """
-            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
+            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path, 
+                   COALESCE(libro.cantidad_ejemplares, 0) AS cantidad_ejemplares,
                    autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
             FROM libro
             INNER JOIN autor ON libro.autor_id = autor.autor_id
@@ -62,10 +64,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val autorId = getInt(getColumnIndexOrThrow("autor_id"))
                 val generoId = getInt(getColumnIndexOrThrow("genero_id"))
                 val imagePath = getString(getColumnIndexOrThrow("image_path"))
+                val cantidadEjemplares = getInt(getColumnIndexOrThrow("cantidad_ejemplares"))
                 val autorNombre = getString(getColumnIndexOrThrow("autor_nombre"))
                 val generoNombre = getString(getColumnIndexOrThrow("genero_nombre"))
 
-                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath))
+                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath, cantidadEjemplares))
             }
         }
         cursor.close()
@@ -109,10 +112,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put("titulo", libro.titulo)
             put("autor_id", libro.autor_id)
             put("genero_id", libro.genero_id)
-            put("image_path", libro.imagePath) // Agregar esta línea
+            put("image_path", libro.imagePath)
+            put("cantidad_ejemplares", libro.cantidadEjemplares)
         }
         db.insert("libro", null, values)
     }
+
 
     // Método para obtener el ID del autor basado en el nombre
     fun getAutorIdByName(nombre: String): Int? {
@@ -133,11 +138,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     //Obtener id de libro
+    // Obtener id de libro
     fun getBookById(id: Int): Libros? {
         val db = this.readableDatabase
         var libro: Libros? = null
         val cursor = db.query(
-            "libro", arrayOf("libro_id", "titulo", "autor_id", "genero_id", "image_path"),
+            "libro", arrayOf("libro_id", "titulo", "autor_id", "genero_id", "image_path", "cantidad_ejemplares"),
             "libro_id=?", arrayOf(id.toString()), null, null, null, null
         )
         if (cursor != null) {
@@ -147,10 +153,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
                 val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
                 val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
-                val autorNombre = getAutorNameById(autorId) // Método para obtener el nombre del autor
-                val generoNombre = getGeneroNameById(generoId) // Método para obtener el nombre del género
+                val cantidadEjemplares = cursor.getInt(cursor.getColumnIndexOrThrow("cantidad_ejemplares"))
+                val autorNombre = getAutorNameById(autorId)
+                val generoNombre = getGeneroNameById(generoId)
 
-                libro = Libros(libroId, titulo, autorId, generoId, autorNombre, generoNombre, imagePath)
+                libro = Libros(libroId, titulo, autorId, generoId, autorNombre, generoNombre, imagePath, cantidadEjemplares)
             }
             cursor.close()
         }
@@ -250,15 +257,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
 
     // Método para recuperar los libros
+    // Método para recuperar los libros
     fun getAllBooks(): List<Libros> {
         val db = readableDatabase
         val query = """
-        SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path,
-               autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
-        FROM libro
-        INNER JOIN autor ON libro.autor_id = autor.autor_id
-        INNER JOIN genero ON libro.genero_id = genero.genero_id
-    """
+            SELECT libro.libro_id, libro.titulo, libro.autor_id, libro.genero_id, libro.image_path, 
+                   COALESCE(libro.cantidad_ejemplares, 0) AS cantidad_ejemplares,
+                   autor.nombres AS autor_nombre, genero.nombre AS genero_nombre
+            FROM libro
+            INNER JOIN autor ON libro.autor_id = autor.autor_id
+            INNER JOIN genero ON libro.genero_id = genero.genero_id
+        """
         val books = mutableListOf<Libros>()
         db.rawQuery(query, null).use { cursor ->
             while (cursor.moveToNext()) {
@@ -267,15 +276,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val autorId = cursor.getInt(cursor.getColumnIndexOrThrow("autor_id"))
                 val generoId = cursor.getInt(cursor.getColumnIndexOrThrow("genero_id"))
                 val imagePath = cursor.getString(cursor.getColumnIndexOrThrow("image_path"))
+                val cantidadEjemplares = cursor.getInt(cursor.getColumnIndexOrThrow("cantidad_ejemplares"))
                 val autorNombre = cursor.getString(cursor.getColumnIndexOrThrow("autor_nombre"))
                 val generoNombre = cursor.getString(cursor.getColumnIndexOrThrow("genero_nombre"))
 
-                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath))
+                books.add(Libros(id, titulo, autorId, generoId, autorNombre, generoNombre, imagePath, cantidadEjemplares))
             }
         }
-        db.close()
         return books
     }
+
 
 
     // Método para obtener un usuario por su ID
@@ -349,6 +359,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     "autor_id INTEGER," +
                     "genero_id INTEGER," +
                     "image_path TEXT," + // Añadido para la ruta de la imagen
+                    "cantidad_ejemplares INTEGER DEFAULT 0," +
                     "FOREIGN KEY(autor_id) REFERENCES autor(autor_id)," +
                     "FOREIGN KEY(genero_id) REFERENCES genero(genero_id))"
 

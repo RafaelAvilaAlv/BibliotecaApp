@@ -10,8 +10,9 @@ data class Libros (
 
     val autorNombre: String = "", // Agrega esto
     val generoNombre: String = "",// Agrega esto
-    val imagePath: String? // Agregar esta propiedad
+    val imagePath: String?, // Agregar esta propiedad
 
 
+    val cantidadEjemplares: Int = 0 //
 
 )
