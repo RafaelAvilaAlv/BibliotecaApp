@@ -103,6 +103,6 @@ class AgegarPrestamo : AppCompatActivity(){
             put("fecha_prestamo", prestamo.fecha_prestamo)
             put("fecha_devolucion", prestamo.fecha_devolucion)
         }
-        db.insert("pedidos", null, values)
+        db.insert("prestamo", null, values)
     }
 }

@@ -188,7 +188,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun getPrestamosByUserId(userId: Int): List<Prestamo> {
         val prestamos = mutableListOf<Prestamo>()
         val db = readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM prestamos WHERE usuario_id = ?", arrayOf(userId.toString()))
+        val cursor = db.rawQuery("SELECT * FROM prestamo WHERE usuario_id = ?", arrayOf(userId.toString()))
 
         if (cursor.moveToFirst()) {
             do {
@@ -245,7 +245,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     //Metodo para obtener el titulo del libro basado en el id
     fun getLibroTitleById(libroId: Int): String {
         val db = readableDatabase
-        val cursor = db.rawQuery("SELECT titulo FROM libros WHERE id = ?", arrayOf(libroId.toString()))
+        val cursor = db.rawQuery("SELECT titulo FROM libro WHERE id = ?", arrayOf(libroId.toString()))
 
         var titulo = "Título no encontrado"
         if (cursor.moveToFirst()) {
